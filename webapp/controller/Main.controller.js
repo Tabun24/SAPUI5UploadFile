@@ -23,13 +23,22 @@ sap.ui.define([
 		},
 
 		_setupMobileCameraCapture: function() {
-			// Set up mobile camera capture after the view is rendered
+			// Set up mobile camera and gallery support after the view is rendered
 			setTimeout(() => {
-				if (sap.ui.Device.system.phone || sap.ui.Device.system.tablet) {
-					var oFileUploader = this.byId("imageFileUploader");
-					if (oFileUploader && oFileUploader.oFileUpload) {
-						oFileUploader.oFileUpload.setAttribute("capture", "environment");
-						oFileUploader.oFileUpload.setAttribute("accept", "image/*");
+				var oFileUploader = this.byId("imageFileUploader");
+				if (oFileUploader && oFileUploader.oFileUpload) {
+					// Set accept attribute for image files
+					oFileUploader.oFileUpload.setAttribute("accept", "image/*");
+					
+					// For mobile devices, enable both camera and gallery access
+					if (sap.ui.Device.system.phone || sap.ui.Device.system.tablet) {
+						// The capture attribute allows camera access, but removing it allows both camera and gallery
+						// Modern mobile browsers will show options for both camera and gallery when capture is not set
+						// but accept="image/*" is set
+						oFileUploader.oFileUpload.removeAttribute("capture");
+						
+						// Add multiple attribute to potentially allow multiple file selection
+						oFileUploader.oFileUpload.setAttribute("multiple", "false"); // Keep single for now, but can be changed
 					}
 				}
 			}, 100);
@@ -199,6 +208,31 @@ sap.ui.define([
 				MessageToast.show(this.getResourceBundle().getText("uploadSuccess", ["file"]));
 			} else {
 				MessageBox.error(this.getResourceBundle().getText("uploadError", ["file"]));
+			}
+		},
+
+		onTakePicture: function() {
+			// Trigger camera capture specifically
+			var oFileUploader = this.byId("imageFileUploader");
+			if (oFileUploader && oFileUploader.oFileUpload) {
+				// Temporarily set capture attribute for camera
+				oFileUploader.oFileUpload.setAttribute("capture", "environment");
+				oFileUploader.oFileUpload.click();
+				
+				// Remove capture after a brief delay to restore dual functionality
+				setTimeout(() => {
+					oFileUploader.oFileUpload.removeAttribute("capture");
+				}, 1000);
+			}
+		},
+
+		onSelectFromGallery: function() {
+			// Trigger gallery selection specifically
+			var oFileUploader = this.byId("imageFileUploader");
+			if (oFileUploader && oFileUploader.oFileUpload) {
+				// Ensure no capture attribute for gallery selection
+				oFileUploader.oFileUpload.removeAttribute("capture");
+				oFileUploader.oFileUpload.click();
 			}
 		}
 	});

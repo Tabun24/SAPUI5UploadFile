@@ -26,20 +26,38 @@
 					<VBox class="sapUiMediumMarginTop">
 						<Text text="{i18n>uploadTitle}" class="sapUiMediumMarginBottom" />
 						<VBox class="sapUiMediumMarginBottom">
+							<!-- Hidden FileUploader for actual file handling -->
 							<unified:FileUploader
 								id="imageFileUploader"
 								name="imageUpload"
 								uploadUrl="/api/upload"
-								tooltip="{i18n>selectImageTooltip}"
 								uploadComplete="onUploadComplete"
 								change="onFileChange"
 								fileType="jpg,jpeg,png,gif"
 								maximumFileSize="10"
 								mimeType="image/jpeg,image/jpg,image/png,image/gif"
-								buttonText="{i18n>selectImageButton}"
-								placeholder="{i18n>selectImagePlaceholder}"
-								style="Emphasized"
-								width="100%" />
+								visible="false" />
+							
+							<!-- Visible UI for image selection options -->
+							<VBox class="sapUiSmallMarginBottom">
+								<HBox class="sapUiTinyMarginBottom" justifyContent="SpaceBetween">
+									<Button
+										id="takePictureButton"
+										text="{i18n>takePictureButton}"
+										icon="sap-icon://camera"
+										press="onTakePicture"
+										type="Emphasized"
+										width="48%" />
+									<Button
+										id="selectFromGalleryButton"
+										text="{i18n>selectFromGalleryButton}"
+										icon="sap-icon://folder-full"
+										press="onSelectFromGallery"
+										type="Default"
+										width="48%" />
+								</HBox>
+								<Text text="{i18n>imageSelectionHint}" class="sapUiTinyText sapUiContentPadding" />
+							</VBox>
 						</VBox>
 						<VBox id="selectedFilesBox" visible="false" class="sapUiMediumMarginBottom">
 							<Text text="{i18n>selectedFiles}" class="sapUiSmallMarginBottom" />
