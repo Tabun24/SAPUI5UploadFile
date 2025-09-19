@@ -41,7 +41,6 @@ coverage/
 
 # UI5 specific
 .ui5/
-dist/
 resources/
 test-resources/
 
