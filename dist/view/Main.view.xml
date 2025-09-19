@@ -1,0 +1,66 @@
+<mvc:View
+	controllerName="myapp.controller.Main"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:unified="sap.ui.unified"
+	core:require="{
+		formatter: 'myapp/model/formatter'
+	}">
+
+	<Page
+		title="{i18n>appTitle}"
+		id="page">
+		<content>
+			<IllustratedMessage
+				title="{i18n>appTitle}"
+				illustrationType="sapIllus-SuccessHighFive"
+				enableVerticalResponsiveness="true"
+				description="{i18n>appDescription}">
+				<additionalContent>
+					<Button
+						id="helloButton"
+						text="{formatter: 'formatter.formatValue', path: 'i18n>btnText'}"
+						press="sayHello" />
+					<VBox class="sapUiMediumMarginTop">
+						<Text text="{i18n>uploadTitle}" class="sapUiMediumMarginBottom" />
+						<VBox class="sapUiMediumMarginBottom">
+							<unified:FileUploader
+								id="imageFileUploader"
+								name="imageUpload"
+								tooltip="{i18n>selectImageTooltip}"
+								change="onFileChange"
+								fileType="jpg,jpeg,png,gif"
+								maximumFileSize="10"
+								mimeType="image/jpeg,image/jpg,image/png,image/gif"
+								buttonText="{i18n>selectImageButton}"
+								placeholder="{i18n>selectImagePlaceholder}"
+								style="Emphasized"
+								width="100%" />
+						</VBox>
+						<VBox id="selectedFilesBox" visible="false" class="sapUiMediumMarginBottom">
+							<Text text="{i18n>selectedFiles}" class="sapUiSmallMarginBottom" />
+							<List id="filesList" items="{/selectedFiles}" mode="Delete" delete="onDeleteFile">
+								<StandardListItem
+									title="{name}"
+									description="{i18n>fileSize}: {size}"
+									icon="sap-icon://document-text"
+									type="Active" />
+							</List>
+						</VBox>
+						<Button
+							id="uploadButton"
+							text="{i18n>uploadButton}"
+							press="onUploadPress"
+							type="Emphasized"
+							icon="sap-icon://upload"
+							enabled="false"
+							width="100%" />
+					</VBox>
+				</additionalContent>
+			</IllustratedMessage>
+		</content>
+	</Page>
+
+</mvc:View>
